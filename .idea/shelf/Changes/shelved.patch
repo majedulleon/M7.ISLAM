@@ -1,0 +1,252 @@
+Index: src/test/java/selenium/FileDownloadTest.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/test/java/selenium/FileDownloadTest.java b/src/test/java/selenium/FileDownloadTest.java
+new file mode 100644
+--- /dev/null	(date 1706752297000)
++++ b/src/test/java/selenium/FileDownloadTest.java	(date 1706752297000)
+@@ -0,0 +1,23 @@
++package selenium;
++
++import org.openqa.selenium.By;
++import org.testng.Assert;
++import org.testng.annotations.Test;
++
++
++public class FileDownloadTest extends BaseTest {
++    private final By FILE_DOWNLOAD = By.xpath(String.format(PRECISE_TEXT_XPATH, "File Download"));
++    private final String FILE_NAME = "Test.txt";
++    private final By FILE_NAME_XPATH = By.xpath(String.format(PRECISE_TEXT_XPATH, FILE_NAME));
++
++
++    @Test
++    public void fileUploadTest() {
++        driver.findElement(FILE_DOWNLOAD).click();
++        Assert.assertTrue(driver.findElement(FILE_NAME_XPATH).isDisplayed(), "File is not displayed");
++        driver.findElement(FILE_NAME_XPATH).click();
++        // todo: assert file is downloaded
++    }
++
++    // todo: delete file
++}
+Index: src/test/java/selenium/DynamicControlsTest.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/test/java/selenium/DynamicControlsTest.java b/src/test/java/selenium/DynamicControlsTest.java
+new file mode 100644
+--- /dev/null	(date 1706752297000)
++++ b/src/test/java/selenium/DynamicControlsTest.java	(date 1706752297000)
+@@ -0,0 +1,18 @@
++package selenium;
++
++import org.openqa.selenium.By;
++import org.testng.annotations.Test;
++
++public class DynamicControlsTest extends BaseTest {
++    private final By DYNAMIC_CONTROL = By.xpath(String.format(PRECISE_TEXT_XPATH, "Dynamic Controls"));
++    private final By ENABLE = By.xpath(String.format(PRECISE_TEXT_XPATH, "Enable"));
++
++    @Test
++    public void dynamicControlsTest() {
++        driver.findElement(DYNAMIC_CONTROL).click();
++        driver.findElement(ENABLE).click();
++        // todo: assert input is enabled
++        // todo: input random generated text
++        // todo: assert inputted text
++    }
++}
+Index: src/test/java/selenium/FramesTest.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/test/java/selenium/FramesTest.java b/src/test/java/selenium/FramesTest.java
+new file mode 100644
+--- /dev/null	(date 1706752297000)
++++ b/src/test/java/selenium/FramesTest.java	(date 1706752297000)
+@@ -0,0 +1,30 @@
++package selenium;
++
++import org.openqa.selenium.By;
++import org.testng.Assert;
++import org.testng.annotations.Test;
++
++import java.util.UUID;
++
++public class FramesTest extends BaseTest {
++    private final By FRAMES = By.xpath(String.format(PRECISE_TEXT_XPATH, "Frames"));
++    private final By IFRAME = By.xpath(String.format(PRECISE_TEXT_XPATH, "iFrame"));
++    private final String RANDOM = UUID.randomUUID().toString();
++    private final String INIT_TEXT = "Your content goes here.";
++    private final By EDIT = By.xpath(String.format(PRECISE_TEXT_XPATH, "Edit"));
++    private final By UNDO = By.xpath(String.format(PRECISE_TEXT_XPATH, "Undo"));
++    private final String TEXT_IS_NOT_DISPLAYED_MSG = "Text is not displayed";
++
++
++    @Test
++    public void iFrameTest() {
++        driver.findElement(FRAMES).click();
++        driver.findElement(IFRAME).click();
++        //todo: input text to the text field
++        Assert.assertTrue(driver.findElement(By.xpath(String.format(PRECISE_TEXT_XPATH, INIT_TEXT + RANDOM))).isDisplayed(),
++                TEXT_IS_NOT_DISPLAYED_MSG);
++        driver.findElement(EDIT).click();
++        driver.findElement(UNDO).click();
++        // todo: assert text is not displayed
++    }
++}
+Index: src/test/java/selenium/FileUploadTest.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/test/java/selenium/FileUploadTest.java b/src/test/java/selenium/FileUploadTest.java
+new file mode 100644
+--- /dev/null	(date 1706752297000)
++++ b/src/test/java/selenium/FileUploadTest.java	(date 1706752297000)
+@@ -0,0 +1,22 @@
++package selenium;
++
++import org.openqa.selenium.By;
++import org.testng.annotations.Test;
++
++import java.io.File;
++
++
++public class FileUploadTest extends BaseTest {
++    private final By FILE_UPLOAD = By.xpath(String.format(PRECISE_TEXT_XPATH, "File Upload"));
++    private final String FILE_NAME = "file.json";
++    private final String FILE_PATH = RELATIVE_RESOURCE_PATH + FILE_NAME;
++
++
++    @Test
++    public void fileUploadTest() {
++        driver.findElement(FILE_UPLOAD).click();
++        File fileToUpload = new File(FILE_PATH);
++        // todo: upload the file
++        // todo: assert file is uploaded
++    }
++}
+Index: src/test/java/selenium/BaseTest.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/test/java/selenium/BaseTest.java b/src/test/java/selenium/BaseTest.java
+new file mode 100644
+--- /dev/null	(date 1706752297000)
++++ b/src/test/java/selenium/BaseTest.java	(date 1706752297000)
+@@ -0,0 +1,27 @@
++package selenium;
++
++import org.openqa.selenium.WebDriver;
++import org.openqa.selenium.chrome.ChromeDriver;
++import org.testng.annotations.AfterMethod;
++import org.testng.annotations.BeforeMethod;
++
++public class BaseTest {
++    protected WebDriver driver;
++    protected final String URL = "https://the-internet.herokuapp.com/";
++    protected final String PRECISE_TEXT_XPATH = "//*[text()='%s']";
++    protected final String PARTICULAR_TEXT_XPATH = "//*[contains(text(),'%s')]";
++    protected final String RELATIVE_RESOURCE_PATH = "src/test/resources/";
++
++
++    @BeforeMethod
++    public void setup() {
++        driver = new ChromeDriver();
++        driver.get(URL);
++        driver.manage().window().maximize();
++    }
++
++    @AfterMethod
++    public void teardown() {
++        driver.quit();
++    }
++}
+Index: src/test/java/selenium/AlertTest.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/test/java/selenium/AlertTest.java b/src/test/java/selenium/AlertTest.java
+new file mode 100644
+--- /dev/null	(date 1706752297000)
++++ b/src/test/java/selenium/AlertTest.java	(date 1706752297000)
+@@ -0,0 +1,18 @@
++package selenium;
++
++import org.openqa.selenium.By;
++import org.testng.annotations.Test;
++
++public class AlertTest extends BaseTest {
++    private final By JS_ALERT = By.xpath(String.format(PRECISE_TEXT_XPATH, "JavaScript Alerts"));
++    private final By CLICK_FOR_JS_ALERT_BUTTON = By.xpath("//button[@onclick='jsAlert()']");
++
++    @Test
++    public void alertTest() {
++        driver.findElement(JS_ALERT).click();
++        driver.findElement(CLICK_FOR_JS_ALERT_BUTTON).click();
++        // todo: accept alert
++        // todo: assert success message
++    }
++
++}
+Index: src/test/java/selenium/DataTableTests.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/test/java/selenium/DataTableTests.java b/src/test/java/selenium/DataTableTests.java
+new file mode 100644
+--- /dev/null	(date 1706752297000)
++++ b/src/test/java/selenium/DataTableTests.java	(date 1706752297000)
+@@ -0,0 +1,15 @@
++package selenium;
++
++import org.openqa.selenium.By;
++import org.testng.annotations.Test;
++
++public class DataTableTests extends BaseTest {
++    private final By SORTABLE_DATA_TABLES = By.xpath(String.format(PRECISE_TEXT_XPATH, "Sortable Data Tables"));
++
++
++    @Test
++    public void dataTableTest() {
++        driver.findElement(SORTABLE_DATA_TABLES).click();
++        // todo: assert due sum
++    }
++}
+Index: src/test/java/selenium/BasicAuthTest.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/test/java/selenium/BasicAuthTest.java b/src/test/java/selenium/BasicAuthTest.java
+new file mode 100644
+--- /dev/null	(date 1706752297000)
++++ b/src/test/java/selenium/BasicAuthTest.java	(date 1706752297000)
+@@ -0,0 +1,19 @@
++package selenium;
++
++import org.openqa.selenium.By;
++import org.testng.Assert;
++import org.testng.annotations.Test;
++
++public class BasicAuthTest extends BaseTest {
++    private final By BASIC_AUTH = By.xpath(String.format(PRECISE_TEXT_XPATH, "Basic Auth"));
++    private final By SUCCESS_AUTH = By.xpath(String.format(PARTICULAR_TEXT_XPATH,
++            "Congratulations! You must have the proper credentials"));
++
++    //todo: add basic auth
++
++    @Test
++    public void basicAuthTest() {
++        driver.findElement(BASIC_AUTH).click();
++        Assert.assertTrue(driver.findElement(SUCCESS_AUTH).isDisplayed(), "Message is not displayed");
++    }
++}
